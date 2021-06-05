@@ -22,7 +22,7 @@ let moviesData = [
                 "last_name": "Brando",
                 "role_type": "ACTOR",
                 "profile_description": "Marlon Brando Jr. was an American actor and film director. He is credited with bringing realism to film acting and helping to popularize the Stanislavski system of acting having studied with Stella Adler in the 1940s. Regarded for his cultural influence on 20th century film, Brando's Academy Award-winning performances include that of Terry Malloy in On the Waterfront (1954) and Don Vito Corleone in The Godfather (1972). Brando was an activist for many causes, notably the civil rights movement and various Native American movements.",
-                "profile_url": "https://upload.wikimedia.org/wikipedia/commons/e/e5/Marlon_Brando_%28cropped%29.jpg",
+                "profile_url": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Marlon_Brando_by_Edward_Cronenweth%2C_1955.jpg",
                 "wiki_url": "https://en.wikipedia.org/wiki/Marlon_Brando"
             },
             {
