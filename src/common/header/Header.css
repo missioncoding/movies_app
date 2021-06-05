@@ -7,6 +7,10 @@
 .login-button {
     float: right;
 }
+.book-button {
+    float: right;
+    padding-right: 10px;
+}
 
 .app-logo {
     animation: app-logo-spin infinite 8s linear;
