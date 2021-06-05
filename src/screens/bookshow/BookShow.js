@@ -10,6 +10,7 @@ import showDate from '../../common/showDate';
 import showTime from '../../common/showTime';
 import CardContent from '@material-ui/core/CardContent';
 import './BookShow.css';
+import Confirmation from '../confirmation/Confirmation';
 import { Button, FormControl, FormHelperText, Input, InputLabel, MenuItem, Select } from '@material-ui/core';
 
 class BookShow extends Component {
@@ -64,6 +65,8 @@ class BookShow extends Component {
         this.state.tickets === "" ||  this.state.tickets === 0
                             ? this.setState({ticketsRequired: "dispBlock"}) : 
                                      this.setState({ticketsRequired: "dispNone"});
+        
+        ReactDOM.render(<Confirmation bookingSummary={this.state} />, document.getElementById('root'));
     }
 
     render () {
@@ -79,7 +82,7 @@ class BookShow extends Component {
                     <CardContent>
                         <Typography variant="headline" component="h2">
                                 BOOK SHOW
-                        </Typography>
+                        </Typography><br />
                         <FormControl required className="formControl">
                             <InputLabel htmlFor="location">Choose Location: </InputLabel>
                             <Select 
