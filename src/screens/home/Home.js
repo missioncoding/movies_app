@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
 import './Home.css';
 import Header from '../../common/header/Header';
 import {withStyles} from '@material-ui/core/styles';
@@ -18,7 +17,6 @@ import Input from '@material-ui/core/Input';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import { Button, Checkbox, ListItemText, TextField } from '@material-ui/core';
-import Details from '../details/Details';
 
 const styles = theme => ({
     root: {
@@ -58,9 +56,37 @@ class Home extends Component {
         super();
         this.state = {
             moviename : "",
+            upcomingMovies :[{}],
+            releasedMovies :[{}],
             genres : [],
             artists : []
         }
+    }
+
+    componentDidMount () {
+        let data= null;
+        let xhr = new XMLHttpRequest();
+        let that = this;
+        xhr.addEventListener('readystatechange', function() {
+            if (this.readyState == 4) {
+                that.setState({upcomingMovies : JSON.parse(this.responseText)});
+            }
+        })
+
+        xhr.open("GET", this.props.baseurl + "movies?status=PUBLISHED");
+        xhr.setRequestHeader("Cache-Control","no-cache");
+        xhr.send(data)
+
+        let xhrreleased = new XMLHttpRequest();
+        xhrreleased.addEventListener('readystatechange', function() {
+            if (this.readyState == 4) {
+                that.setState({releasedMovies : JSON.parse(this.responseText)});
+            }
+        })
+        // currently we dont have data with released so using same PUBLISHED
+        xhrreleased.open("GET", this.props.baseurl + "movies?status=PUBLISHED");
+        xhrreleased.setRequestHeader("Cache-Control","no-cache");
+        xhrreleased.send(data)
     }
 
     movieNameChangeHandler = (e) => {
@@ -76,7 +102,7 @@ class Home extends Component {
     }
 
     movieClickHandler = (movieid) => {
-        ReactDOM.render(<Details movieId={movieid}/>, document.getElementById('root'));
+        this.props.history.push('/movie/' + movieid);
     }
 
     render () {
@@ -88,8 +114,8 @@ class Home extends Component {
                 <span className="um-heading">Upcoming Movies</span>
             </div>
             <GridList cols={5} className={classes.gridListUpcomingMovies}>
-                {moviesData.map(movie => (
-                    <GridListTile key={movie.id}>
+                {this.state.upcomingMovies.map(movie => (
+                    <GridListTile key={"upcoming" + movie.id}>
                         <img src={movie.poster_url} className="movie-poster" alt={movie.title}/>
                         <GridListTileBar title={movie.title}/>
                     </GridListTile>
@@ -98,7 +124,7 @@ class Home extends Component {
             <div className="flex-container">
                     <div className="left">
                         <GridList cellHeight={350} cols={4} className={classes.gridListMain}>
-                            {moviesData.map(movie => (
+                            {this.state.releasedMovies.map(movie => (
                                 <GridListTile onClick={() => this.movieClickHandler(movie.id)} className="released-movie-grid-item" key={"grid" + movie.id}>
                                     <img src={movie.poster_url} className="movie-poster" alt={movie.title} />
                                     <GridListTileBar
@@ -128,7 +154,6 @@ class Home extends Component {
                                         renderValue={selected => selected.join(',')}
                                         value={this.state.genres}
                                         onChange={this.genreSelectChangeHandler}>
-                                        <MenuItem value="0">None</MenuItem>
                                         {genres.map(genre => (
                                             <MenuItem value={genre.name} key={genre.id}>
                                                 <Checkbox checked={this.state.genres.indexOf(genre.name) > -1} />
@@ -145,7 +170,6 @@ class Home extends Component {
                                         renderValue={selected => selected.join(',')}
                                         value={this.state.artists}
                                         onChange={this.artistSelectChangeHandler}>
-                                        <MenuItem value="0">None</MenuItem>
                                         {artists.map(artist => (
                                             <MenuItem key={artist.id} value={artist.first_name + " " + artist.last_name}>
                                                 <Checkbox checked={this.state.artists.indexOf(artist.first_name + " " + artist.last_name) > -1} />

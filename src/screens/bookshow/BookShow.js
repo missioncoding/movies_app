@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
-import Header from '../../common/header/Header';
-import Home from '../home/Home';
+import Header from '../../common/header/Header';    
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import language from '../../common/language';
@@ -10,8 +8,8 @@ import showDate from '../../common/showDate';
 import showTime from '../../common/showTime';
 import CardContent from '@material-ui/core/CardContent';
 import './BookShow.css';
-import Confirmation from '../confirmation/Confirmation';
 import { Button, FormControl, FormHelperText, Input, InputLabel, MenuItem, Select } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 class BookShow extends Component {
 
@@ -33,9 +31,6 @@ class BookShow extends Component {
         }
     }
 
-    backToMovieDetailsHandler = () => {
-        ReactDOM.render(<Home />, document.getElementById('root'));
-    }
 
     locationChangeHandler = (e) => {
         this.setState({location : e.target.value});
@@ -66,16 +61,21 @@ class BookShow extends Component {
                             ? this.setState({ticketsRequired: "dispBlock"}) : 
                                      this.setState({ticketsRequired: "dispNone"});
         
-        ReactDOM.render(<Confirmation bookingSummary={this.state} />, document.getElementById('root'));
+        if ((this.state.location === "") || (this.state.language === "") || (this.state.showTime === "") || (this.state.showDate === "") || (this.state.tickets === 0)) { return; }
+
+        this.props.history.push({
+            pathname: '/confirm/' + this.props.match.params.id,
+            bookingSummary: this.state
+        })
     }
 
     render () {
         return (
             <div>
                 <Header />
-                <div className="back">
-                    <Typography onClick={this.backToMovieDetailsHandler}>
-                        &#60; Back to Movie Details
+                <div className="bookShow">
+                    <Typography className="back" >
+                    <Link to={"/movie/" + this.props.match.params.id}>&#60; Back to Movie Details</Link>
                     </Typography>
                 </div>
                 <Card className="cardStyle">
